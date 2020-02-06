@@ -1,0 +1,63 @@
+create user krishnagiri identified by krishnagiri;
+grant dba to krishnagiri;
+
+create table person(driver_id varchar(10),name varchar(20),address varchar(30),primary key(driver_id));
+
+create table car(reg_num varchar(10),model varchar(10),year int,primary key(reg_num));
+
+desc person
+clear screen 
+
+create table accident(report_num int,accident_date date,location
+varchar(20),primary key(report_num));
+
+create table owns(driver_id varchar(10),reg_num varchar(10),primary key(driver_id,reg_num),foreign key(driver_id) references person(driver_id),foreign key(reg_num) references car(reg_num));
+
+create table participated(driver_id varchar(10), reg_num varchar(10),report_num int, damage_amount int,primary key(driver_id,reg_num,report_num),foreign key(driver_id) references person(driver_id),foreign key(reg_num) references car(reg_num),foreign key(report_num) references accident(report_num));
+
+desc participated
+
+insert into person values('121','richard','srinivas nagar');
+ insert into person values('122','pradeep','rajajinagar');
+ insert into person values('123','smith','ashoknagar');
+ select * from person;
+ commit;
+ 
+insert into car values('KA052356','honda','1990');
+insert into car values('KA058437','lancer','1975');
+insert into car values('KA057372','toyota','1988');
+insert into car values('KA054567','audi','1999');
+  select * from car;
+  commit;
+  
+   insert into accident values(12,'01-jan-05','bulltemple road');
+    insert into accident values(13,'02-jan-02','southend circle');
+     insert into accident values(14,'04-feb-08','mysore road');
+      insert into accident values(15,'06-mar-09','mysore road');
+       select * from accident;
+       commit;
+       
+        insert into owns values ('121','KA052356');
+         insert into owns values ('122','KA058437');
+          insert into owns values ('123','KA057372');
+ select * from owns;
+commit;
+
+ insert into participated values ('121','KA052356',12,10000);
+ insert into participated values ('122','KA058437',13,40000);
+ insert into participated values ('123','KA057372',14,30000);
+  select * from participated;
+  commit;
+  
+   update participated set damage_amount=25000 where reg_num='KA052356' and
+report_num=12;
+commit;
+select * from participated;
+insert into accident values(16,'15-MAR-08','Domlur');
+select * from accident;
+
+select count(distinct driver_id) CNT from participated a, accident b where
+a.report_num=b.report_num and b.accident_date like '%08';
+
+select count(report_num) CNT from car c,participated p where c.reg_num=p.reg_num and
+model='lancer';
